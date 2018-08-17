@@ -1,4 +1,4 @@
-'''Simulation of birth and death process with a M/M/1 queue which is a simple Markov model'''
+'''Stochastic simulation of birth and death process with a Markov M/M/1 queue using Gillespie Direct method'''
 import random
 def getSystemParameters():
     return {'lambda': 5, 'mu': 10}
@@ -12,9 +12,11 @@ def simulate(initialState = 0, simulationTime = 5000):
     currentState = initialState
     timePassed = 0
     reachedStates = {} #dict(state:sojournTime); sojournTime is total spent time for the state
+    nextStatesAll = {} #dict(state:nextStates); 
     while timePassed < simulationTime:
         if currentState not in reachedStates: reachedStates[currentState] = 0
-        nextStates = nextStateSpace(currentState)
+        if currentState not in nextStatesAll: nextStatesAll[currentState] = nextStateSpace(currentState)         
+        nextStates = nextStatesAll[currentState]
         transRateSum = sum(nextStates.values())
         nextInterval = random.expovariate(transRateSum)
         r = random.uniform(0,1)
@@ -33,7 +35,7 @@ def exactStationaryDistribution(state):
     systemLoad = p['lambda'] / p['mu']
     return (1 - systemLoad) * systemLoad ** state
 #----------------------- Run the experiment ----------------------------#
-sd = simulate(0, 20000)
+sd = simulate(0, 10000)
 mse = 0 # mean squared error
 for state in sd:
     e = exactStationaryDistribution(state) # exact distribution
@@ -41,3 +43,24 @@ for state in sd:
     print('[ State -',state,'] [ Simulation -', "{:.7f}".format(sd[state]),'] [ Exact -',"{:.7f}".format(e),' ]')
 
 print ("Mean Squared Error (MSE):", "{:.7f}".format(mse / len(sd)))
+
+#----------------------- Visualize the accuracy based on Simulation Time ----------------------------#
+serie = {'x':[],'y':[]}
+for t in [500,1000,2000,3000,5000,7000,10000,15000,20000]:
+    mse = 0
+    sd = simulate(0, t)
+    for state in sd:
+        e = exactStationaryDistribution(state) # exact distribution
+        mse += (sd[state] - e)**2
+    serie['x'].append(t)
+    serie['y'].append(mse / len(sd))
+
+import matplotlib.pyplot as plt
+fig = plt.figure(1,figsize=(7.5, 3.9), dpi=80)
+plt.plot(serie['x'], serie['y'], label='MSE Dependence on Simulation Time')
+ax = plt.gca();
+ax.set_xlabel('Simulation Time')
+ax.set_ylabel('MSE')
+plt.grid(color='#A9A9A9', linestyle='--', linewidth=0.5)
+plt.show()
+
