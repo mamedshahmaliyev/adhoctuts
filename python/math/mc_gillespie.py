@@ -63,4 +63,3 @@ ax.set_xlabel('Simulation Time')
 ax.set_ylabel('MSE')
 plt.grid(color='#A9A9A9', linestyle='--', linewidth=0.5)
 plt.show()
-
