@@ -15,7 +15,7 @@ table_arr=(${table_list//,/ })
 # Declare the associative array of the users as username=>password pair
 # e.g: declare -A user_list=(["'user1'"]="pass1" ["'user2'"]="pass2")
 # In our case there is a single user
-declare -A user_list=(["'aht_r'@'192.168.%.%'"]="Adhoctuts2018#")
+declare -A user_list=(["'aht_r'@'localhost'"]="Adhoctuts2018#")
 for user in "${!user_list[@]}"
 do
 	pass=${user_list[$user]}
@@ -24,6 +24,7 @@ do
 	
 	# Provide SELECT privilege
 	mysql -h $db_host -u $db_user -p"$db_pass" -se "revoke all privileges, grant option from $user;" $db_name
+	mysql -h $db_host -u $db_user -p"$db_pass" -se "grant usage on $db_name.* TO $user;" $db_name
 	for tbl in "${table_arr[@]}"; do
 	    echo "grant select on $tbl TO $user"
 		mysql -h $db_host -u $db_user -p"$db_pass" -se "grant select on $tbl TO $user;" $db_name	
