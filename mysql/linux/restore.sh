@@ -6,7 +6,7 @@ db_name='adhoctuts'
 db_user='root'
 db_pass='Adhoctuts2018#'
 
-dump_file='/root/dump_ignore.sql'
+dump_file='/root/scripts/dump_ignore.sql'
 
 # Associative table list array as source_table=>destination_table pairs
 declare -A tbl_list=( ["tbl1"]="restored_tbl1" ["tbl2"]="restored_tbl2")
