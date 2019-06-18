@@ -1,3 +1,6 @@
+%= https://adhoctuts.com/mysql-selective-exceptional-permissions-and-backup-restore/ =% 
+%= https://youtu.be/8fWQbtIISdc =% 
+
 @ECHO OFF
 %= Define the database and root authorization details =% 
 set db_host=192.168.70.138

@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# https://adhoctuts.com/mysql-selective-exceptional-permissions-and-backup-restore/ 
+# https://youtu.be/8fWQbtIISdc
+
 # Define the database and root authorization details
 db_host='localhost'
 db_name='adhoctuts'

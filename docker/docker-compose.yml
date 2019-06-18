@@ -1,0 +1,85 @@
+# link to tutorial: https://adhoctuts.com/run-mulitple-databases-in-single-machine-using-docker
+
+version: "3.1"
+
+networks:
+  docker-network:  
+
+services:
+# https://hub.docker.com/_/mysql
+  mysql: # service name
+    image: mysql:8
+    container_name: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - /docker/mysql/data:/var/lib/mysql # for data persistance
+      - /docker/mysql/conf:/etc/mysql/conf.d
+    environment:
+      - MYSQL_ROOT_PASSWORD=AdHocTuts2019@
+    ports:
+      - "3306:3306"
+    networks:
+      - docker-network
+    #restart: on-failure
+
+# https://hub.docker.com/_/microsoft-mssql-server
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2017-CU8-ubuntu
+    container_name: mssql
+    volumes:
+      - /docker/mssql/data:/var/opt/mssql
+    environment:
+      - SA_PASSWORD=AdHocTuts2019@
+      - ACCEPT_EULA=Y
+      - TZ=Asia/Baku
+      - MSSQL_PID=Express
+    ports:
+      - "1433:1433"
+    networks:
+      - docker-network
+
+# https://hub.docker.com/_/oracle-database-enterprise-edition
+# Accept Terms of Service for Oracle Database Enterprise Edition (Proceed to Checkout). 
+# Then in command line: docker login
+# sqlplus sys/Oradoc_db1@ORCLDB as sysdba
+  oracle:
+    image: store/oracle/database-enterprise:12.2.0.1-slim
+    container_name: oracle
+    volumes:
+      - /docker/oracle/data:/ORCL # host path must have 777 permission or writable by docker oracle user
+    environment:
+      - DB_SID=ORCLDB
+      - DB_MEMORY=1GB
+    ports:
+      - "1521:1521"
+    networks:
+      - docker-network
+
+# https://hub.docker.com/_/postgres
+  postgres:
+    image: postgres:12
+    container_name: postgres
+    volumes:
+      - /docker/postgre/data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=AdHocTuts2019@
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=docker_db
+    ports:
+      - "5432:5432"
+    networks:
+      - docker-network
+
+# https://hub.docker.com/_/mongo
+  mongo:
+    image: mongo:3.4.21-xenial
+    container_name: mongo
+    volumes:
+      - /docker/mongo/data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=AdHocTuts2019@
+    ports:
+      - "27017:27017"
+    networks:
+      - docker-network

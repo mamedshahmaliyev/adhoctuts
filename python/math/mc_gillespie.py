@@ -1,4 +1,7 @@
 '''Stochastic simulation of birth and death process with a Markov M/M/1 queue using Gillespie Direct method'''
+####### urls: 
+####### https://adhoctuts.com/find-stationary-distribution-of-markov-chain-using-stochastic-simulation-gillespies-in-python/
+####### https://youtu.be/3DRdoqhNFrk
 import random
 def getSystemParameters():
     return {'lambda': 5, 'mu': 10}
