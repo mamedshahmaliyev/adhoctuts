@@ -1,0 +1,22 @@
+# link to tutorial: https://adhoctuts.com/run-mulitple-databases-in-single-machine-using-docker
+
+[mysqld]
+skip-host-cache 
+skip-name-resolve
+sql-mode=""
+
+#slow_query_log=1
+#slow_query_log_file=/var/lib/mysql/SPM-DB-slow.log
+#log-output=TABLE
+
+## main setting of InnoDB. The buffer pool is where data and indexes are cached: 60-70% of RAM e.g: 5-6GB (8GB RAM)
+innodb_buffer_pool_size = 128M
+
+## this is the size of the redo logs. The redo logs are used to make sure writes are fast and durable and also during crash recovery, max 4GB start 512MB
+innodb_log_file_size = 10M
+
+## this setting will tell InnoDB if it should store data and indexes in the shared tablespace (innodb_file_per_table = OFF) or in a separate, on means separate
+innodb_file_per_table = ON
+
+##  this is the size of the buffer for transactions that have not been committed yet
+innodb_log_buffer_size = 2M
