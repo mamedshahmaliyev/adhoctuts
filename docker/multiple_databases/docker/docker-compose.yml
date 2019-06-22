@@ -7,9 +7,9 @@ networks:
 
 services:
 # https://hub.docker.com/_/mysql
-  mysql: # service name
+  mysql_persistance: # service name
     image: mysql:8
-    container_name: mysql
+    container_name: mysql_p # container_name
     command: --default-authentication-plugin=mysql_native_password
     volumes:
       - /docker/mysql/data:/var/lib/mysql # for data persistance
@@ -21,6 +21,16 @@ services:
     networks:
       - docker-network
     #restart: on-failure
+
+  mysql_no_persistance:
+    image: mysql:5.7
+    container_name: mysql_np
+    environment:
+      - MYSQL_ROOT_PASSWORD=AdHocTuts2019@
+    ports:
+      - "3308:3306"
+    networks:
+      - docker-network
 
 # https://hub.docker.com/_/microsoft-mssql-server
   mssql:
